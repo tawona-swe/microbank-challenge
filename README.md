@@ -29,14 +29,14 @@ Both backend services are Spring Boot applications that use Maven for dependency
 
 #### MySQL Database Setup
 
-Before running the services, you need to create the `bankdb` database.
+Before running the services, you need to create the `banking_db` database.
 
 1.  Open your MySQL client.
 
 2.  Run the following command:
 
     ```sql
-    CREATE DATABASE bankdb;
+    CREATE DATABASE banking_db;
     ```
 
 3.  Ensure your `application.properties` files in both services are configured with the correct username and password for your MySQL instance.
@@ -51,7 +51,7 @@ Before running the services, you need to create the `bankdb` database.
 
     ```properties
     # MySQL database configuration
-    spring.datasource.url=jdbc:mysql://localhost:3306/bankdb?useSSL=false&serverTimezone=UTC
+    spring.datasource.url=jdbc:mysql://localhost:3306/banking_db?useSSL=false&serverTimezone=UTC
     spring.datasource.username=your-username
     spring.datasource.password=your-password
     spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
@@ -79,7 +79,7 @@ Before running the services, you need to create the `bankdb` database.
 
     ```properties
     # MySQL database configuration
-    spring.datasource.url=jdbc:mysql://localhost:3306/bankdb?useSSL=false&serverTimezone=UTC
+    spring.datasource.url=jdbc:mysql://localhost:3306/banking_db?useSSL=false&serverTimezone=UTC
     spring.datasource.username=your-username
     spring.datasource.password=your-password
     spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
