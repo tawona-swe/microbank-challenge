@@ -19,7 +19,7 @@ The backend services are configured to run on the following ports:
   * **`clientservice`**: `8081`
   * **`bankingservice`**: `8082`
 
-The frontend is configured to run on port `3000` (default for `npm start`) and is hardcoded to call the backend services at `http://localhost:8081/api` and `http://localhost:8082/api`.
+The frontend is configured to run on port `5173` (default for `npm run dev`) and is hardcoded to call the backend services at `http://localhost:8081/api` and `http://localhost:8082/api`.
 
 -----
 
@@ -110,7 +110,7 @@ The frontend is a React application. You can use the code provided previously.
     ```
 3.  Run the application:
     ```bash
-    npm start
+    npm run dev
     ```
 
 -----
@@ -161,5 +161,5 @@ To run the full application, follow these steps in separate terminal windows:
 1.  **Start your MySQL Server.**
 2.  In the `clientservice` directory, run `mvn spring-boot:run`.
 3.  In the `bankingservice` directory, run `mvn spring-boot:run`.
-4.  In the frontend directory, run `npm start`.
-5.  Open your web browser and navigate to **`http://localhost:3000`** to access the application.
+4.  In the frontend directory, run `npm run dev`.
+5.  Open your web browser and navigate to **`http://localhost:5173`** to access the application.
