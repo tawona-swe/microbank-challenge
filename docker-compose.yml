@@ -1,0 +1,72 @@
+services:
+  clientservice:
+    build:
+      context: . # Build context is the root of your microbank project
+      dockerfile: ./services/clientservice/Dockerfile # Explicitly point to the Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - JWT_SECRET=your-secret-from-bezkoder-app-properties
+    networks:
+      - microbank
+    depends_on:
+      db:
+        condition: service_healthy # Ensure DB is ready before clientservice starts
+
+  bankingservice:
+    build:
+      context: . # Build context is the root of your microbank project
+      dockerfile: ./services/bankingservice/Dockerfile # Explicitly point to the Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - CLIENT_SERVICE_URL=http://clientservice:8081
+    depends_on:
+      clientservice: # bankingservice needs clientservice to be up for inter-service communication
+        condition: service_started
+      db:
+        condition: service_healthy # bankingservice also needs DB to be ready
+    networks:
+      - microbank
+
+  db:
+    image: mysql:8.0
+    container_name: mysql_db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: banking_db
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - microbank
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password="]
+      interval: 5s
+      timeout: 20s
+      retries: 10
+      start_period: 30s
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_web
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: ""
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - microbank
+
+networks:
+  microbank:
+    driver: bridge
+
+volumes:
+  db_data:
