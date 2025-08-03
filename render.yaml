@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: clientservice
+    env: docker
+    repo: https://github.com/tawona-swe/microbank-challenge.git
+    dockerfilePath: ./services/clientservice/Dockerfile
+    envVars:
+      - key: JWT_SECRET
+        value: your-secret
+    plan: free
+    healthCheckPath: /api/auth/test
+
+  - type: web
+    name: bankingservice
+    env: docker
+    repo: https://github.com/tawona-swe/microbank-challenge.git
+    dockerfilePath: ./services/bankingservice/Dockerfile
+    envVars:
+      - key: CLIENT_SERVICE_URL
+        value: https://clientservice.onrender.com # Update after deploying clientservice
+    plan: free
+    healthCheckPath: /api/banking/test
+
+  - type: pserv
+    name: mysql
+    env: docker
+    dockerfilePath: ""
+    image: mysql:8.0
+    envVars:
+      - key: MYSQL_DATABASE
+        value: banking_db
+      - key: MYSQL_ALLOW_EMPTY_PASSWORD
+        value: yes
+    plan: free
