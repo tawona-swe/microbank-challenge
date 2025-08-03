@@ -1,10 +1,6 @@
 import React, { useState, useContext, useEffect, createContext, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 
-// Tailwind CSS is assumed to be available.
-// If you are using create-react-app, you need to configure Tailwind.
-// For Next.js, it's typically pre-configured.
-
 // --- Contexts for State Management ---
 // AuthContext: Manages user authentication state (token, user info)
 const AuthContext = createContext();
