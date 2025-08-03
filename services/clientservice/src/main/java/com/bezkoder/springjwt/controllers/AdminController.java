@@ -32,4 +32,10 @@ public class AdminController {
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
+
+    @GetMapping("/clients")
+    // @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<User>> getClients() {
+        return ResponseEntity.ok(userRepository.findAll());
+    }
 }

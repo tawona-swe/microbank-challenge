@@ -27,4 +27,15 @@ public class UserController {
             .orElse(ResponseEntity.status(404).body("User not found"));
 
     }
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getProfile(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(401).body("Unauthorized");
+        }
+
+        return userRepository.findById(userDetails.getId())
+            .<ResponseEntity<?>>map(user -> ResponseEntity.ok().body(user))
+            .orElse(ResponseEntity.status(404).body("User not found"));
+    }
 }

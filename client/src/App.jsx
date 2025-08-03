@@ -57,7 +57,7 @@ const ClientProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   const API_CLIENT_URL = 'http://localhost:8081/api';
-  const API_BANKING_URL = 'http://localhost:8082/api';
+  const API_BANKING_URL = 'http://localhost:8082/api/banking';
 
   const fetchData = useCallback(async () => {
     if (!token) {
@@ -78,10 +78,10 @@ const ClientProvider = ({ children }) => {
     try {
       // Use Promise.all to fetch all data concurrently for efficiency
       const [profileRes, balanceRes, transactionsRes, clientsRes] = await Promise.all([
-        fetch(`${API_CLIENT_URL}/profile`, { headers }),
+        fetch(`${API_CLIENT_URL}/user/profile`, { headers }),
         fetch(`${API_BANKING_URL}/balance`, { headers }),
         fetch(`${API_BANKING_URL}/transactions`, { headers }),
-        user?.roles?.includes('ROLE_ADMIN') ? fetch(`${API_CLIENT_URL}/clients`, { headers }) : Promise.resolve(null),
+        user?.roles?.includes('ROLE_ADMIN') ? fetch(`${API_CLIENT_URL}/admin/clients`, { headers }) : Promise.resolve(null),
       ]);
 
       // Handle profile response
