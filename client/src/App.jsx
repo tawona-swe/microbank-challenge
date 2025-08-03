@@ -317,7 +317,7 @@ const AuthPage = ({ setCurrentPage }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useContext(AuthContext);
@@ -335,7 +335,7 @@ const AuthPage = ({ setCurrentPage }) => {
     // The 'name' field has been removed as it is not present in the provided backend code.
     const payload = isLogin
       ? { username: username, password: password }
-      : { username: username, email: username, password: password }; 
+      : { username: username, email: email, password: password }; 
 
     try {
       const response = await fetch(url, {
@@ -378,25 +378,25 @@ const AuthPage = ({ setCurrentPage }) => {
       <form onSubmit={handleSubmit} className="w-full space-y-6">
         {!isLogin && (
           <div className="space-y-2">
-            <label className="block text-gray-700 font-semibold" htmlFor="name">Name</label>
+            <label className="block text-gray-700 font-semibold" htmlFor="email">Email</label>
             <input
-              id="name"
-              type="text"
+              id="email"
+              type="email"
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              placeholder="Your Name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              placeholder="name@mail.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required={!isLogin}
             />
           </div>
         )}
         <div className="space-y-2">
-          <label className="block text-gray-700 font-semibold" htmlFor="username">Username/Email</label>
+          <label className="block text-gray-700 font-semibold" htmlFor="username">Username</label>
           <input
             id="username"
             type="text"
             className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-            placeholder="username@email.com"
+            placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
