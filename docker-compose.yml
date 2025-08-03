@@ -30,24 +30,24 @@ services:
       - microbank
 
   db:
-  image: postgres:15
-  container_name: postgres_db
-  ports:
-    - "5432:5432"
-  environment:
-    POSTGRES_DB: banking_db
-    POSTGRES_USER: postgres
-    POSTGRES_PASSWORD: your_password_here
-  volumes:
-    - db_data:/var/lib/postgresql/data
-  networks:
-    - microbank
-  healthcheck:
-    test: ["CMD", "pg_isready", "-U", "postgres"]
-    interval: 5s
-    timeout: 20s
-    retries: 10
-    start_period: 30s
+    image: mysql:8.0
+    container_name: mysql_db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: banking_db
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - microbank
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password="]
+      interval: 5s
+      timeout: 20s
+      retries: 10
+      start_period: 30s
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
