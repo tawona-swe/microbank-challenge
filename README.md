@@ -1,5 +1,3 @@
-
-````md
 # Microbank Application
 
 **Microbank** is a microservices-based banking system comprising:
@@ -60,12 +58,12 @@ Use Docker Compose to spin up all services in one go.
 
 ```bash
 docker-compose up --build
-````
+```
 
 Then visit:
 
-* Frontend → [http://localhost:5173](http://localhost:5173)
-* phpMyAdmin → [http://localhost:8080](http://localhost:8080)
+- Frontend → [http://localhost:5173](http://localhost:5173)
+- phpMyAdmin → [http://localhost:8080](http://localhost:8080)  
   *(Use `root` as username with no password)*
 
 ---
@@ -109,27 +107,20 @@ spring.datasource.password=your-password
 
 ### Client Service (`http://localhost:8081`)
 
-| Method | Endpoint                    | Description          |
-| ------ | --------------------------- | -------------------- |
-| POST   | `/api/auth/signin`          | Log in               |
-| POST   | `/api/auth/signup`          | Register             |
-| GET    | `/api/admin/clients`        | List clients (admin) |
-| PUT    | `/api/admin/blacklist/{id}` | Blacklist a client   |
+| Method | Endpoint                        | Description           |
+|--------|----------------------------------|-----------------------|
+| POST   | `/api/auth/signin`              | Log in                |
+| POST   | `/api/auth/signup`              | Register              |
+| GET    | `/api/admin/clients`            | List clients (admin)  |
+| PUT    | `/api/admin/blacklist/{id}`     | Blacklist a client    |
 
 ### Banking Service (`http://localhost:8082`)
 
-| Method | Endpoint                    | Description           |
-| ------ | --------------------------- | --------------------- |
-| POST   | `/api/banking/deposit`      | Deposit into account  |
-| POST   | `/api/banking/withdraw`     | Withdraw from account |
-| GET    | `/api/banking/transactions` | List all transactions |
-| GET    | `/api/banking/balance`      | Get account balance   |
+| Method | Endpoint                      | Description                |
+|--------|-------------------------------|----------------------------|
+| POST   | `/api/banking/deposit`        | Deposit into account       |
+| POST   | `/api/banking/withdraw`       | Withdraw from account      |
+| GET    | `/api/banking/transactions`   | List all transactions      |
+| GET    | `/api/banking/balance`        | Get account balance        |
 
 > All protected endpoints require `Authorization: Bearer <JWT>` in the header.
-
----
-
-```
----
-
-```
