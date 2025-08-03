@@ -1,5 +1,6 @@
 package com.example.bankingservice.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -9,18 +10,27 @@ import java.util.Map;
 @Service
 public class UserValidationService {
 
-    private final String CLIENT_SERVICE_URL = "http://client-service:8081/api/user/me";
+    @Value("${client.service.url}")
+    private String clientServiceBaseUrl;
 
     private final RestTemplate restTemplate = new RestTemplate();
+
+    private String getUserEndpoint() {
+        return clientServiceBaseUrl + "/user/me";
+    }
+
+    private String formatToken(String token) {
+        return token != null && token.startsWith("Bearer ") ? token : "Bearer " + token;
+    }
 
     public boolean validateUser(String token) {
         try {
             HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", token);
+            headers.set("Authorization", formatToken(token));
             HttpEntity<Void> request = new HttpEntity<>(headers);
 
             ResponseEntity<Map> response = restTemplate.exchange(
-                CLIENT_SERVICE_URL,
+                getUserEndpoint(),
                 HttpMethod.GET,
                 request,
                 Map.class
@@ -31,29 +41,21 @@ public class UserValidationService {
                 return user != null && !(Boolean.TRUE.equals(user.get("blacklisted")));
             }
 
+            System.out.println("Validation failed with status: " + response.getStatusCode());
         } catch (Exception e) {
-            System.out.println("Validation failed: " + e.getMessage());
+            System.out.println("Validation exception: " + e.getMessage());
         }
         return false;
     }
 
-    // --- NEW METHOD ADDED BELOW THIS LINE ---
-
-    /**
-     * Calls the bankingserviceservice's /me endpoint to get user details and extracts the user ID.
-     * This ID is then used by the Banking Service to fetch user-specific data like transactions.
-     *
-     * @param token The JWT token from the Authorization header.
-     * @return The user's ID (Long) if successful and valid, otherwise null.
-     */
     public Long getUserIdFromToken(String token) {
         try {
             HttpHeaders headers = new HttpHeaders();
-            headers.set("Authorization", token);
+            headers.set("Authorization", formatToken(token));
             HttpEntity<Void> request = new HttpEntity<>(headers);
 
             ResponseEntity<Map> response = restTemplate.exchange(
-                CLIENT_SERVICE_URL,
+                getUserEndpoint(),
                 HttpMethod.GET,
                 request,
                 Map.class
@@ -61,20 +63,15 @@ public class UserValidationService {
 
             if (response.getStatusCode().is2xxSuccessful()) {
                 Map user = response.getBody();
-                // Assuming your /me endpoint in the client service returns an "id" field
                 if (user != null && user.containsKey("id")) {
                     Object idObj = user.get("id");
-                    // Handle potential type mismatch (e.g., Integer from JSON mapped to Object, needing cast to Long)
-                    if (idObj instanceof Integer) {
-                        return ((Integer) idObj).longValue();
-                    } else if (idObj instanceof Long) {
-                        return (Long) idObj;
-                    }
+                    return (idObj instanceof Integer) ? ((Integer) idObj).longValue() : (Long) idObj;
                 }
             }
 
+            System.out.println("Failed to extract user ID with status: " + response.getStatusCode());
         } catch (Exception e) {
-            System.out.println("Failed to get user ID from token: " + e.getMessage());
+            System.out.println("Error getting user ID: " + e.getMessage());
         }
         return null;
     }
